@@ -1,0 +1,20 @@
+{
+  "manifest_version":2,
+  "name":"MED Chrome Extension",
+  "version":"0.1",
+  "background":{
+    "scripts":["background.js"]
+  },
+  "content_scripts":[
+    {
+      "matches":[ "https://www.aviationexam.com/*" ],
+      "js":["content.js"]
+    }
+  ],
+  "permissions":[
+    "cookies",
+    "webRequest",
+    "*://www.aviationexam.com/*"
+  ]
+
+}
