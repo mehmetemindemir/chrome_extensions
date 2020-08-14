@@ -164,8 +164,8 @@ function runRequestScript(message) {
                 questions.forEach(element => {
 
                   var xhr = new XMLHttpRequest();
-                  var url = "https://ws.mehmetemindemir.com/questions";
-                  //ar url = "https://api.cbtroom.com/api/Question";
+                  //var url = "https://ws.mehmetemindemir.com/questions";
+                    var url = "https://api.cbtroom.com/api/Question";
                   xhr.open("POST", url, true);
                   xhr.setRequestHeader("Content-Type", "application/json");
                   xhr.setRequestHeader("Access-Control-Allow-Origin", "*");

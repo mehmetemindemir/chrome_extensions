@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0fa939ae-df54-49e0-8cf8-b44ac514547d" name="Default Changelist" comment="" />
+    <list default="true" id="0fa939ae-df54-49e0-8cf8-b44ac514547d" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/content.js" beforeDir="false" afterPath="$PROJECT_DIR$/content.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,6 +38,8 @@
       <workItem from="1594232484094" duration="601000" />
       <workItem from="1596554114427" duration="4000" />
       <workItem from="1597260867811" duration="280000" />
+      <workItem from="1597413498734" duration="88000" />
+      <workItem from="1597420698660" duration="28000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <created>1597261024094</created>
@@ -43,7 +48,14 @@
       <option name="project" value="LOCAL" />
       <updated>1597261024094</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="add run between tabs">
+      <created>1597413565892</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1597413565892</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -51,20 +63,21 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="first commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="first commit" />
+    <MESSAGE value="add run between tabs" />
+    <option name="LAST_COMMIT_MESSAGE" value="add run between tabs" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="416" y="8" key="CommitChangelistDialog2" timestamp="1597261023865">
+    <state x="416" y="8" key="CommitChangelistDialog2" timestamp="1597413565734">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="416" y="8" key="CommitChangelistDialog2/0.0.1680.1050@0.0.1680.1050" timestamp="1597261023865" />
+    <state x="416" y="8" key="CommitChangelistDialog2/0.0.1680.1050@0.0.1680.1050" timestamp="1597413565734" />
     <state x="677" y="428" key="Github.ShareDialog" timestamp="1597260982140">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="677" y="428" key="Github.ShareDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1597260982140" />
-    <state x="439" y="262" key="Vcs.Push.Dialog.v2" timestamp="1597261040834">
+    <state x="439" y="262" key="Vcs.Push.Dialog.v2" timestamp="1597413578303">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="439" y="262" key="Vcs.Push.Dialog.v2/0.0.1680.1050@0.0.1680.1050" timestamp="1597261040834" />
+    <state x="439" y="262" key="Vcs.Push.Dialog.v2/0.0.1680.1050@0.0.1680.1050" timestamp="1597413578303" />
   </component>
 </project>
