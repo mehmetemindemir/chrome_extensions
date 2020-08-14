@@ -4,7 +4,6 @@ let  c1="";
 let c2="";
 let c3="";
 let c4="";
-let clickQ=false;
 let clickA=false;
 let processState=true;
 let questions=[];
@@ -16,15 +15,26 @@ let question ={
   "QuestionBody":"",
   "OriginalId":""
 };
-let questionBody ;
+let questionBody;
 let quest = null;
 let answer;
 let finish=false;
-const qLists = Array.from(document.querySelectorAll('.qsb-div'));
+let nextTabActive=false;
+let clickTabCount=0;
+let tabArray=Array.from(document.querySelectorAll('#ctl00_CPH_Main_LT1_Pager_LV a'));
+let tabCount=0;
+if(tabArray.length>0){
+  tabCount=tabArray.length-2;
+  
+}
+console.log("tab Count : "+tabCount);
+
+let qLists = Array.from(document.querySelectorAll('.qsb-div'));
 let chooses=Array.from(document.querySelectorAll('.ans-let'));
 let answerNum=Math.floor(Math.random() * chooses.length)+1;  
 answerNum=1;
 
+//cookie
 if(document.getElementById("ctl00_CPH_Main_TestSettings_LB_StartTest")){
   var btn = document.getElementById("ctl00_CPH_Main_TestSettings_LB_StartTest");
   btn.addEventListener('click', function() {
@@ -36,11 +46,6 @@ if(document.getElementById("ctl00_CPH_Main_TestSettings_LB_StartTest")){
     console.log("checkedBoxes: "+checkedBoxes.length);
 });
 }
-
-
-
-
-
 
 
 if(qLists.length>0 && count<qLists.length && answersList.length<1){
@@ -72,7 +77,45 @@ chrome.runtime.onMessage.addListener(runRequestScript);
 
 function runRequestScript(message) {
     if(message=="tamam"){
+
         answerNum=1;
+        if(nextTabActive){
+          nextTabActive=false;
+          count=0;
+          questions=[];
+          answersList=[];
+          qLists = Array.from(document.querySelectorAll('.qsb-div'));
+          chooses=Array.from(document.querySelectorAll('.ans-let'));
+          answersList=[];
+
+          if(qLists.length>0 && count<qLists.length && answersList.length<1){
+            question={
+              "QuestionBody":document.getElementById("Div_qs").innerText,
+              "ImageList":[],
+              "OriginalId":document.getElementById("L_QsID").innerText.replace("Nº ",""),
+              "Explanation":document.getElementById("TabPanel_Exp").innerHTML,
+              "QuestionClassRoot":getCookie("subareaid"),
+            }
+            questionBody={  "shuffleanswers": "1",   "single": "true",  "answernumbering": "abc", "answer":[]  };
+                            
+            c1=document.getElementById("tr_answer1").children[1].innerHTML;
+            c2=document.getElementById("tr_answer2").children[1].innerHTML;
+            c3=document.getElementById("tr_answer3").children[1].innerHTML;
+            if(chooses.length==4){
+              c4=document.getElementById("tr_answer4").children[1].innerHTML;
+              
+            }
+            for (let index = 0; index <  Array.from(document.querySelectorAll('#Panel_Figures img')).length; index++) {
+              question.ImageList.push( Array.from(document.querySelectorAll('#Panel_Figures img'))[index].src);
+              //console.log( Array.from(document.querySelectorAll('#Panel_Figures img'))[index].src)  ;                 
+            }
+            setTimeout( () => { document.getElementById("tr_answer"+answerNum).click(); }, 2000);  
+            clickA=true;
+          }
+
+        }
+
+
         if (qLists.length>0 && count+1>qLists.length && !finish) {
           setTimeout( () => { 
               question={
@@ -121,8 +164,8 @@ function runRequestScript(message) {
                 questions.forEach(element => {
 
                   var xhr = new XMLHttpRequest();
-                  //var url = "https://ws.mehmetemindemir.com/questions";
-                  var url = "https://api.cbtroom.com/api/Question";
+                  var url = "https://ws.mehmetemindemir.com/questions";
+                  //ar url = "https://api.cbtroom.com/api/Question";
                   xhr.open("POST", url, true);
                   xhr.setRequestHeader("Content-Type", "application/json");
                   xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
@@ -139,9 +182,17 @@ function runRequestScript(message) {
                 });
               console.log(questions.length);
               //console.log("questions :"+JSON.stringify(questions));
-              console.log("Bitti");
-              finish=true;
-            }, 5000);   
+              if(tabCount>0 && clickTabCount<tabCount+1){
+                nextTabActive=true;
+                clickTabCount++;
+                tabArray[clickTabCount].click();
+              }else{
+                console.log("Bitti");      
+                finish=true;
+              }
+              
+
+            }, 3000);   
 
         } 
         //last question check answer
@@ -149,14 +200,14 @@ function runRequestScript(message) {
           count++;
           setTimeout( () => {
           document.getElementById("tr_answer"+answerNum).click(); 
-          }, 5000);  
+          },3000);  
         
         }
         if (qLists.length>0 && count+1<qLists.length) {
 
             if(clickA){              
               clickA=!clickA;   
-                console.log("get answer and next question ")
+                //console.log("get answer and next question ")
                 setTimeout( () => { 
                  
                   try {
@@ -195,15 +246,16 @@ function runRequestScript(message) {
                   questions.push(question);
                   
                   count++; 
+                  console.log('Question Number : '+count);
                   qLists[count].children[0].click();
                    
-                }, 5000);     
+                }, 3000);     
               
           } else if(!clickA){
             clickA=!clickA;
               setTimeout( () => { 
                 chooses=Array.from(document.querySelectorAll('.ans-let'));
-                console.log("get question and next answer ")
+                //console.log("get question and next answer ")
                 question={
                   "QuestionBody":document.getElementById("Div_qs").innerText,
                   "ImageList":[],
@@ -220,10 +272,15 @@ function runRequestScript(message) {
                   if(chooses.length==4){
                     c4=document.getElementById("tr_answer4").children[1].innerHTML;                   
                   }
-                for (let index = 0; index <  Array.from(document.querySelectorAll('#Panel_Figures img')).length; index++) {
-                  question.ImageList.push( Array.from(document.querySelectorAll('#Panel_Figures img'))[index].src);
-                  console.log( Array.from(document.querySelectorAll('#Panel_Figures img'))[index].src);                 
-                }
+                  try {
+                    for (let index = 0; index <  Array.from(document.querySelectorAll('#Panel_Figures img')).length; index++) {
+                      question.ImageList.push( Array.from(document.querySelectorAll('#Panel_Figures img'))[index].src);
+                      console.log( Array.from(document.querySelectorAll('#Panel_Figures img'))[index].src);                 
+                    }
+                  } catch (error) {
+                    
+                  }
+                
               
                 document.getElementById("tr_answer"+answerNum).click();
                 
