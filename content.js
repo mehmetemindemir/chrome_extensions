@@ -19,6 +19,7 @@ let questionBody;
 let quest = null;
 let answer;
 let finish=false;
+let auto=true;
 let nextTabActive=false;
 let clickTabCount=0;
 let tabArray=Array.from(document.querySelectorAll('#ctl00_CPH_Main_LT1_Pager_LV a'));
@@ -76,12 +77,11 @@ chrome.runtime.onMessage.addListener(runRequestScript);
 
 
 function runRequestScript(message) {
-    if(message=="tamam"){
+    if(message==="tamam" && auto){
 
         answerNum=1;
         if(nextTabActive){
           nextTabActive=false;
-          count=0;
           questions=[];
           answersList=[];
           qLists = Array.from(document.querySelectorAll('.qsb-div'));
@@ -164,8 +164,8 @@ function runRequestScript(message) {
                 questions.forEach(element => {
 
                   var xhr = new XMLHttpRequest();
-                  //var url = "https://ws.mehmetemindemir.com/questions";
-                    var url = "https://api.cbtroom.com/api/Question";
+                  var url = "https://ws.mehmetemindemir.com/questions";
+                  //var url = "https://api.cbtroom.com/api/Question";
                   xhr.open("POST", url, true);
                   xhr.setRequestHeader("Content-Type", "application/json");
                   xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
@@ -317,3 +317,95 @@ function runRequestScript(message) {
     }
     return "";
   }
+
+addEvent(document, "keypress", function (e) {
+    e = e || window.event;
+    console.log(" if Keypress   :"+e.keyCode);
+    qLists = Array.from(document.querySelectorAll('.qsb-div'));
+    chooses=Array.from(document.querySelectorAll('.ans-let'));
+    if(e.keyCode===49){
+        auto=false;
+    }else if(e.keyCode===50){
+        auto=true;
+        clickA=false;
+        qLists[count].children[0].click();
+
+    }else if(e.keyCode===51){
+        //console.log(" if Keypress   :"+e.keyCode);
+
+        if(qLists.length>0 && count<qLists.length && answersList.length<1){
+            question={
+                "QuestionBody":document.getElementById("Div_qs").innerText,
+                "ImageList":[],
+                "OriginalId":document.getElementById("L_QsID").innerText.replace("Nº ",""),
+                "Explanation":document.getElementById("TabPanel_Exp").innerHTML,
+                "QuestionClassRoot":getCookie("subareaid"),
+            }
+            questionBody={  "shuffleanswers": "1",   "single": "true",  "answernumbering": "abc", "answer":[]  };
+            c1=document.getElementById("tr_answer1").children[1].innerHTML;
+            c2=document.getElementById("tr_answer2").children[1].innerHTML;
+            c3=document.getElementById("tr_answer3").children[1].innerHTML;
+            answer={ "text":c1,"fraction":0};
+            if(document.getElementById("tr_answer1").className.indexOf("tr-ans-corr") !== -1){
+                answer.fraction=100;
+            }
+            questionBody.answer.push(answer);
+            answer={ "text":c2,"fraction":0};
+            if(document.getElementById("tr_answer2").className.indexOf("tr-ans-corr") !== -1){
+                answer.fraction=100;
+            }
+            questionBody.answer.push(answer);
+            answer={ "text":c3,"fraction":0};
+            if(document.getElementById("tr_answer3").className.indexOf("tr-ans-corr") !== -1){
+                answer.fraction=100;
+            }
+            questionBody.answer.push(answer);
+            if(chooses.length==4){
+                c4=document.getElementById("tr_answer4").children[1].innerHTML;
+                answer={ "text":c4,"fraction":0};
+                if(document.getElementById("tr_answer4").className.indexOf("tr-ans-corr") !== -1){
+                    answer.fraction=100;
+                }
+                questionBody.answer.push(answer);
+            }
+
+
+            question.QuestionDetail=questionBody;
+            for (let index = 0; index <  Array.from(document.querySelectorAll('#Panel_Figures img')).length; index++) {
+                question.ImageList.push( Array.from(document.querySelectorAll('#Panel_Figures img'))[index].src);
+                console.log( Array.from(document.querySelectorAll('#Panel_Figures img'))[index].src)   ;
+            }
+            var xhr = new XMLHttpRequest();
+            var url = "https://ws.mehmetemindemir.com/questions";
+            //var url = "https://api.cbtroom.com/api/Question";
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+            xhr.setRequestHeader("Access-Control-Allow-Methods","POST, GET, OPTIONS, PUT, DELETE");
+            xhr.setRequestHeader("Access-Control-Allow-Headers","Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization");
+            xhr.onreadystatechange=function() {
+                if(xhr.readyState==4 && xhr.status==400){
+                    console.log(xhr.responseText);
+                }
+            }
+            var data = JSON.stringify(question);
+            console.log("questions :"+JSON.stringify(question));
+            xhr.send(data);
+
+        }
+
+
+    }
+    //console.log("Keypress  :"+e.keyCode);
+
+});
+
+function addEvent(element, eventName, callback) {
+    if (element.addEventListener) {
+        element.addEventListener(eventName, callback, false);
+    } else if (element.attachEvent) {
+        element.attachEvent("on" + eventName, callback);
+    } else {
+        element["on" + eventName] = callback;
+    }
+}
